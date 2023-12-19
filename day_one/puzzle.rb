@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require_relative '../lib'
+
 def calibration_sum
-  file_data = read_file('input.txt')
+  file_data = read_file(File.dirname(__FILE__), 'input.txt')
 
   file_data.map do |line|
     numbers = line.gsub(/[^0-9]/, '')
@@ -12,7 +14,7 @@ def calibration_sum
 end
 
 def calibration_sum_part_two
-  file_data = read_file('input.txt')
+  file_data = read_file(File.dirname(__FILE__), 'input.txt')
 
   numbers_hash = {
     'oneight' => 18,
@@ -41,9 +43,3 @@ def calibration_sum_part_two
 
   values.reduce(0, :+)
 end
-
-def read_file(filename)
-  file_path = File.join(File.dirname(__FILE__), filename)
-  File.readlines(file_path).map(&:chomp)
-end
-
