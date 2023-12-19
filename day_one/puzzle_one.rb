@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def calibration_sum
-  file_data = read_file('input.txt')
+  file_data = read_file('puzzle_one_input.txt')
 
   file_data.map do |line|
     numbers = line.gsub(/[^0-9]/, '')
