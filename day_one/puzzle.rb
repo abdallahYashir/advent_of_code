@@ -44,10 +44,6 @@ end
 
 def read_file(filename)
   file_path = File.join(File.dirname(__FILE__), filename)
-  file = File.open(file_path, 'r')
-  file_data = file.readlines.map(&:chomp)
-  file.close
-  file_data
+  File.readlines(file_path).map(&:chomp)
 end
 
-puts "calibration_sum_part_two: #{calibration_sum_part_two}"
