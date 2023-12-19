@@ -5,12 +5,7 @@ def calibration_sum
 
   file_data.map do |line|
     numbers = line.gsub(/[^0-9]/, '')
-
-    if numbers.length == 1
-      (numbers + numbers).to_i
-    else
-      (numbers[0] + numbers[-1]).to_i
-    end
+    (numbers[0] + numbers[-1]).to_i
   end.sum
 
   sum
@@ -41,12 +36,7 @@ def calibration_sum_part_two
     end
 
     numbers = line.gsub(/[^0-9]/, '')
-
-    if numbers.length == 1
-      (numbers + numbers).to_i
-    else
-      (numbers[0] + numbers[-1]).to_i
-    end
+    (numbers[0] + numbers[-1]).to_i
   end
 
   values.reduce(0, :+)
