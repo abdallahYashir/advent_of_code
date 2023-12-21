@@ -2,33 +2,35 @@
 
 require_relative '../lib'
 
-
 def determine_game_cubes
   file_data = read_file(File.dirname(__FILE__), 'input.txt')
-  # map the data from array of string to hash
-  # first split by :
-  # new Hash or Struct with Game Id
-  # then last string, replace ; by ,
-  # then split by ,
-  # then split by space -> is there any other way to do it?
-  # then use tally to count the occurence of each element??
-
   games = map_data(file_data)
+  games = possible_games(games)
   pp games
+  games.map { |game| game[:id] }.sum
 end
 
 def map_data(data)
   data.map do |line|
     values = line.split(':')
-    game = { id: values[0].split.last.to_i }
-    colours = values[1].gsub(';', ',').split(',').map(&:strip)
-    counts = colours.map do |colour|
-      count, colour = colour.split
-      [colour] * count.to_i
-    end.flatten
+    game = { id: extract_game_id(values[0]) }
+    counts = extract_counts(values[1])
     game.merge!(counts.tally)
   end
 end
 
+def extract_game_id(value)
+  value.split.last.to_i
+end
 
-determine_game_cubes
+def extract_counts(value)
+  colours = value.gsub(';', ',').split(',').map(&:strip)
+  colours.flat_map { |colour| [colour.split.last] * colour.split.first.to_i }
+end
+
+def possible_games(games)
+  games.select { |game| game['red'] <= 12 && game['green'] <= 13 && game['blue'] <= 14 }
+end
+
+
+pp determine_game_cubes
