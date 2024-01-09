@@ -12,61 +12,27 @@ public class PuzzleTwo
 
     public Game[] MapGames(string[] games)
     {
-        List<Game> gameList = new();
-
-        foreach (var gameString in games)
+        return games.Select(gameString =>
         {
             var split = gameString.Split(":");
-            var id = split[0].Split(" ").Last();
-            var rounds = split[1].Split(";").ToArray();
+            var id = int.Parse(split[0].Split(" ").Last());
+            var rounds = split[1].Split(";");
 
-            var roundsSplit = rounds.Select(round => round.Split(",")).ToArray();
+            var colors = rounds.SelectMany(round => round.Split(","))
+                               .Select(color => new
+                               {
+                                   Color = color.Contains("blue") ? "blue" :
+                                           color.Contains("red") ? "red" :
+                                           color.Contains("green") ? "green" : "",
+                                   Number = int.Parse(Regex.Match(color, @"\d+").Value)
+                               });
 
-            var blue = 0;
-            var red = 0;
-            var green = 0;
+            var blue = colors.Where(c => c.Color == "blue").Sum(c => c.Number);
+            var red = colors.Where(c => c.Color == "red").Sum(c => c.Number);
+            var green = colors.Where(c => c.Color == "green").Sum(c => c.Number);
 
-            foreach (var roundValue in roundsSplit)
-            {
-                foreach (var color in roundValue)
-                {
-                    var number = 0;
-                    if (color.Contains("blue"))
-                    {
-                        var match = Regex.Match(color, @"\d+");
-                        if (match.Success)
-                        {
-                            number = int.Parse(match.Value);
-                            blue += Convert.ToInt32(number);
-                        }
-                    }
-                    else if (color.Contains("red"))
-                    {
-                        var match = Regex.Match(color, @"\d+");
-                        if (match.Success)
-                        {
-                            number = int.Parse(match.Value);
-                            red += Convert.ToInt32(number);
-                        }
-                    }
-                    else if (color.Contains("green"))
-                    {
-                        var match = Regex.Match(color, @"\d+");
-                        if (match.Success)
-                        {
-                            number = int.Parse(match.Value);
-                            green += Convert.ToInt32(number);
-                        }
-                    }
-                }
-            }
-
-            Game game = new(int.Parse(id), blue, red, green);
-
-            gameList.Add(game);
-        }
-
-        return [.. gameList];
+            return new Game(id, blue, red, green);
+        }).ToArray();
     }
 
     public Game[] FilterByGame(int blue, int red, int green)
