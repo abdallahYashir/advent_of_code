@@ -7,28 +7,24 @@ public class PuzzleTwo
     public PuzzleTwo(string[] games)
     {
         Games = MapGames(games);
+        // Print();
     }
 
     public Game[] MapGames(string[] games)
     {
-        return games.Select(gameString =>
+        List<Game> gameList = new();
+
+        foreach (var gameString in games)
         {
-            // first split by colon
             var split = gameString.Split(":");
-            // this split by empty space and take the last element
             var id = split[0].Split(" ").Last();
             var rounds = split[1].Split(";").ToArray();
-            // iterate rounds and split by comma
 
             var roundsSplit = rounds.Select(round => round.Split(",")).ToArray();
 
             var blue = 0;
             var red = 0;
             var green = 0;
-
-
-            // iterate and check if string contains B, R, or G
-            // if so, increment the color
 
             foreach (var roundValue in roundsSplit)
             {
@@ -65,24 +61,23 @@ public class PuzzleTwo
                 }
             }
 
-            Console.WriteLine($"Id: {id}, Blue: {blue}, Red: {red}, Green: {green}");
+            Game game = new(int.Parse(id), blue, red, green);
 
-            return new Game
-            {
-                Id = int.Parse(id),
-                Blue = 1,
-                Red = 1,
-                Green = 1
-            };
-        }).ToArray();
+            gameList.Add(game);
+        }
+
+        return [.. gameList];
     }
 
-    public void StructureGames()
+    public Game[] FilterByGame(int blue, int red, int green)
     {
-        foreach(var game in Games)
-        {
-            Console.WriteLine(game);
-        }
+        return Games.Where(game => game.Contains(blue, red, green)).ToArray();
+    }
+
+    public int DetermineSum(int blue, int red, int green)
+    {
+        var games = FilterByGame(blue, red, green);
+        return games.Sum(game => game.Id);
     }
 
     public void Print()
@@ -98,11 +93,12 @@ public class PuzzleTwo
         }
     }
 
-    public class Game
+    public void Print(Game[] games)
     {
-        public int Id { get; set; }
-        public int Blue { get; set; }
-        public int Red { get; set; }
-        public int Green { get; set; }
+        foreach (var game in games)
+        {
+            Console.WriteLine($"Id: {game.Id}, Blue: {game.Blue}, Red: {game.Red}, Green: {game.Green}");
+        }
     }
+
 }
