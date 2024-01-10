@@ -50,37 +50,38 @@ public class PuzzleTwo
     public int CalculateSum(string[] games)
     {
         int sum = 0;
-        foreach (var game in games)
+        foreach (var line in games)
         {
-            var line = game.Replace(";", ",");
-            var split = line.Split(":");
-            var id = int.Parse(split[0].Split(" ").Last());
-            var rounds = split[1].Split(",");
-
-            var red = 0;
+            var game = line.Split(":");
+            var moves = game[1].Split(";");
+            var gameId = int.Parse(game[0].Split(" ").Last());
             var blue = 0;
+            var red = 0;
             var green = 0;
-            
-            foreach (var round in rounds)
+            foreach (var move in moves)
             {
-                if (round.Contains("blue"))
+                var pieces = move.Trim().Split(",");
+                foreach (var piece in pieces)
                 {
-                    blue += int.Parse(Regex.Match(round, @"\d+").Value);
-                }
-                else if (round.Contains("red"))
-                {
-                    red += int.Parse(Regex.Match(round, @"\d+").Value);
-                }
-                else if (round.Contains("green"))
-                {
-                    green += int.Parse(Regex.Match(round, @"\d+").Value);
+                    int count = int.Parse(Regex.Match(piece, @"\d+").Value);
+                    var color = piece.Trim().Split(" ").Last();
+                    if (color == "red" && count > red)
+                    {
+                        red = count;
+                    }
+                    else if (color == "blue" && count > blue)
+                    {
+                        blue = count;
+                    }
+                    else if (color == "green" && count > green)
+                    {
+                        green = count;
+                    }
                 }
             }
-
-
-            if (blue <= 14 && red <= 12 && green <= 13)
+            if (green <= 13 && blue <= 14 && red <= 12)
             {
-                sum += id;
+                sum += gameId;
             }
         }
         return sum;
