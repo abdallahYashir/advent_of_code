@@ -47,9 +47,10 @@ public class PuzzleTwo
         return games.Sum(game => game.Id);
     }
 
-    public int CalculateSum(string[] games)
+    public (int, int) CalculateSum(string[] games)
     {
         int sum = 0;
+        int powerSum = 0;
         foreach (var line in games)
         {
             var game = line.Split(":");
@@ -83,8 +84,10 @@ public class PuzzleTwo
             {
                 sum += gameId;
             }
+            int power = red * blue * green;
+            powerSum += power;
         }
-        return sum;
+        return (sum, powerSum);
     }
 
     public void Print()
