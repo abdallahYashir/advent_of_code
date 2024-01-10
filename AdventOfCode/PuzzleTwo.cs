@@ -43,7 +43,47 @@ public class PuzzleTwo
     public int DetermineSum(int blue, int red, int green)
     {
         var games = FilterByGame(blue, red, green);
+        Print(games);
         return games.Sum(game => game.Id);
+    }
+
+    public int CalculateSum(string[] games)
+    {
+        int sum = 0;
+        foreach (var game in games)
+        {
+            var line = game.Replace(";", ",");
+            var split = line.Split(":");
+            var id = int.Parse(split[0].Split(" ").Last());
+            var rounds = split[1].Split(",");
+
+            var red = 0;
+            var blue = 0;
+            var green = 0;
+            
+            foreach (var round in rounds)
+            {
+                if (round.Contains("blue"))
+                {
+                    blue += int.Parse(Regex.Match(round, @"\d+").Value);
+                }
+                else if (round.Contains("red"))
+                {
+                    red += int.Parse(Regex.Match(round, @"\d+").Value);
+                }
+                else if (round.Contains("green"))
+                {
+                    green += int.Parse(Regex.Match(round, @"\d+").Value);
+                }
+            }
+
+
+            if (blue <= 14 && red <= 12 && green <= 13)
+            {
+                sum += id;
+            }
+        }
+        return sum;
     }
 
     public void Print()

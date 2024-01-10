@@ -12,8 +12,12 @@ const int green = 13;
 PuzzleTwo puzzleTwo = new(file);
 var sum = puzzleTwo.DetermineSum(blue, red, green);
 Console.WriteLine($"Sum: {sum}");
+// sum = puzzleTwo.CalculateSum(file);
+// Console.WriteLine($"Sum: {sum}");
 
 
 PuzzleTwo puzzleTwoFull = new(fullFile);
-var sumFull = puzzleTwoFull.DetermineSum(blue, red, green);
+// var sumFull = puzzleTwoFull.DetermineSum(blue, red, green);
+var sumFull = puzzleTwoFull.CalculateSum(fullFile);
+// puzzleTwoFull.Print();
 Console.WriteLine($"Sum: {sumFull}");
