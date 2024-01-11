@@ -21,3 +21,5 @@ PuzzleTwo puzzleTwoFull = new(fullFile);
 var sumFull = puzzleTwoFull.CalculateSum(fullFile);
 // puzzleTwoFull.Print();
 Console.WriteLine($"Sum: {sumFull}");
+var agg = puzzleTwoFull.Aggregate(fullFile);
+Console.WriteLine($"Sum: {agg}");

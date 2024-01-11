@@ -90,6 +90,44 @@ public class PuzzleTwo
         return (sum, powerSum);
     }
 
+    public (int, int) Aggregate(string[] games)
+    {
+        var results = games.Select(gameLine =>
+        {
+            var gameParts = gameLine.Split(":");
+            var gameId = int.Parse(gameParts[0].Split(" ").Last());
+            var moves = gameParts[1].Split(";");
+
+            var colors = moves.SelectMany(move => move.Trim().Split(","))
+                            .Select(piece =>
+                            {
+                                var count = int.Parse(Regex.Match(piece, @"\d+").Value);
+                                var color = piece.Trim().Split(" ").Last();
+                                return new { Color = color, Count = count };
+                            });
+
+            var maxRed = colors.Where(c => c.Color == "red").Max(c => c.Count);
+            var maxBlue = colors.Where(c => c.Color == "blue").Max(c => c.Count);
+            var maxGreen = colors.Where(c => c.Color == "green").Max(c => c.Count);
+
+            return new
+            {
+                GameId = gameId,
+                MaxRed = maxRed,
+                MaxBlue = maxBlue,
+                MaxGreen = maxGreen,
+                Power = maxRed * maxBlue * maxGreen
+            };
+        });
+
+        var sum = results.Where(r => r.MaxGreen <= 13 && r.MaxBlue <= 14 && r.MaxRed <= 12)
+                        .Sum(r => r.GameId);
+
+        var powerSum = results.Sum(r => r.Power);
+
+        return (sum, powerSum);
+    }
+
     public void Print()
     {
         if (Games == null)
